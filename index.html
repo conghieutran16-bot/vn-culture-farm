@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#bfe6f5">
+<title>越南文化农场 · Vietnamese Cultural Farm</title>
+<style>
+:root{
+  --wood:#8a5a32; --wood-d:#5e3a1c; --wood-l:#b07a46;
+  --leaf:#4f9a3c; --leaf-d:#336b25;
+  --cream:#fff8e8; --cream-d:#f0dfb8; --sun:#f6c445; --berry:#c8402f;
+  --ink:#3b2a1a; --muted:#7a6650;
+  --r:22px; --shadow:0 6px 0 rgba(94,58,28,.35), 0 14px 28px rgba(40,30,10,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+html{background:#cfe9f5}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,"Noto Sans",sans-serif;
+  color:var(--ink);background:#cfe9f5;-webkit-text-size-adjust:100%;
+}
+/* painted background: sky + meadow photo, fixed behind everything */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(#a9dcf2 0,#d6eef7 45%,#eef7e2 75%,#d9eebd 100%)}
+.bg svg{position:absolute;left:0;bottom:0;width:100%;height:42vh;min-height:260px}
+.bg .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85;animation:cloud 60s linear infinite}
+.bg .cloud:before,.bg .cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.bg .cloud:before{width:46%;height:150%;left:16%;top:-60%}.bg .cloud:after{width:36%;height:120%;right:14%;top:-40%}
+@keyframes cloud{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+.app{position:relative;z-index:2;max-width:520px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+
+/* drifting leaves & beans */
+.drift{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.drift i{position:absolute;top:-40px;width:22px;height:22px;opacity:.85;animation:fall linear infinite}
+.drift i.l{background:var(--leaf);border-radius:0 70% 0 70%}
+.drift i.b{width:14px;height:18px;background:#6b3e1f;border-radius:50%;box-shadow:inset -3px 0 0 #3d220f}
+@keyframes fall{0%{transform:translate(0,-40px) rotate(0)}50%{transform:translate(40px,55vh) rotate(180deg)}100%{transform:translate(-10px,110vh) rotate(360deg)}}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+.iconbtn{width:44px;height:44px;border-radius:15px;border:0;background:var(--cream);
+  box-shadow:0 4px 0 var(--wood-l),0 6px 12px rgba(0,0,0,.12);display:grid;place-items:center;cursor:pointer}
+.iconbtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--wood-l)}
+.iconbtn svg{width:22px;height:22px}
+.iconbtn.hidden{visibility:hidden}
+.spacer{flex:1}
+.lang{display:flex;background:var(--wood);border-radius:15px;padding:3px;box-shadow:0 4px 0 var(--wood-d),0 6px 12px rgba(0,0,0,.15)}
+.lang button{border:0;background:transparent;color:var(--cream);font-weight:800;font-size:14px;
+  padding:9px 12px;border-radius:12px;cursor:pointer;font-family:inherit}
+.lang button.on{background:var(--sun);color:var(--wood-d)}
+
+/* screens */
+.screen{display:none;padding:4px 16px calc(32px + env(safe-area-inset-bottom))}
+.screen.active{display:block;animation:in .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+
+/* hanging wooden sign */
+.sign{scroll-margin-top:80px;position:relative;background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 3px,transparent 3px 11px),linear-gradient(var(--wood-l),var(--wood));
+  color:#fff8e8;border-radius:18px;padding:14px 22px;text-align:center;box-shadow:var(--shadow);
+  border:3px solid var(--wood-d);margin:26px auto 18px}
+.sign:before,.sign:after{content:"";position:absolute;top:-26px;width:3px;height:26px;background:var(--wood-d)}
+.sign:before{left:22%}.sign:after{right:22%}
+.sign h1,.sign h2{margin:0;line-height:1.3;text-shadow:0 2px 0 rgba(0,0,0,.28);letter-spacing:.5px}
+.sign h1{font-size:27px}.sign h2{font-size:22px}
+.sign .sub{margin-top:4px;font-size:14px;opacity:.92}
+
+.card{background:var(--cream);border-radius:var(--r);box-shadow:var(--shadow);border:2px solid var(--cream-d);
+  padding:16px;margin-bottom:18px}
+.card h3{margin:0 0 6px;font-size:19px;color:var(--wood-d)}
+.card p{margin:6px 0;line-height:1.65;font-size:15.5px}
+.muted{color:var(--muted);font-size:13.5px!important}
+.tag{display:inline-block;background:var(--leaf);color:#fff;font-size:12.5px;font-weight:800;
+  padding:4px 12px;border-radius:999px;margin-bottom:8px;box-shadow:0 3px 0 var(--leaf-d)}
+.orig{display:block;font-size:14px;color:var(--muted);font-weight:600;margin-top:2px}
+html[lang="vi"] .orig{display:none}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;cursor:pointer;
+  font-family:inherit;font-weight:800;font-size:18px;color:#fff;padding:15px 18px;border-radius:18px;
+  background:linear-gradient(#5fae49,var(--leaf-d));box-shadow:0 6px 0 #234a19,0 10px 18px rgba(0,0,0,.15);margin:12px 0}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #234a19}
+.btn.wood{background:linear-gradient(var(--wood-l),var(--wood));box-shadow:0 6px 0 var(--wood-d),0 10px 18px rgba(0,0,0,.15)}
+.btn.sun{background:linear-gradient(#ffd866,var(--sun));color:var(--wood-d);box-shadow:0 6px 0 #c08f17,0 10px 18px rgba(0,0,0,.15)}
+.btn.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+/* photos */
+.fig{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/10;margin-bottom:12px;
+  background:linear-gradient(135deg,#ffe7a8,#bfe3a0);display:grid;place-items:center;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.fig.tall{aspect-ratio:4/5}.fig.tall2{aspect-ratio:2/3;max-width:78%;margin-left:auto;margin-right:auto}
+.fig svg{width:46%;height:auto}
+.fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fade .5s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.fig .cap{position:absolute;right:8px;bottom:8px;z-index:2;background:rgba(0,0,0,.5);color:#fff;font-size:11px;
+  padding:3px 8px;border-radius:999px;display:none}
+.fig.loaded .cap{display:block}
+
+/* splash */
+.logos{display:flex;justify-content:center;align-items:center;gap:14px;background:rgba(255,255,255,.88);
+  border-radius:999px;padding:8px 18px;width:max-content;margin:4px auto 0;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.logos img{height:46px;width:auto;display:block}
+.hero{text-align:center}
+.hero .art{width:100%;max-width:380px;margin:4px auto -14px;display:block}
+.ribbon{display:inline-block;position:relative;background:var(--berry);color:#fff;font-weight:800;font-size:14.5px;
+  padding:8px 22px;margin:4px 0 6px;box-shadow:0 4px 0 #8c2a1e}
+.ribbon:before,.ribbon:after{content:"";position:absolute;top:6px;border:16px solid #a8331f;z-index:-1}
+.ribbon:before{left:-20px;border-left-color:transparent}.ribbon:after{right:-20px;border-right-color:transparent}
+.lead{font-size:16px;line-height:1.65;margin:12px 4px 10px;background:rgba(255,248,232,.85);border-radius:16px;padding:12px 14px}
+
+/* hub: signpost cards */
+.post{display:flex;gap:14px;align-items:center;text-align:left;cursor:pointer;position:relative;padding:14px 16px 14px 14px}
+.post .ic{flex:0 0 74px;height:74px;border-radius:20px;display:grid;place-items:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.08)}
+.post .ic svg{width:50px;height:50px}
+.post h3{margin:0 0 2px}
+.post p{margin:0;font-size:14.5px;color:var(--muted)}
+.post .go{margin-left:auto;width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--sun);color:var(--wood-d);
+  display:grid;place-items:center;font-weight:900;font-size:20px;box-shadow:0 3px 0 #c08f17}
+.post .done{position:absolute;top:-8px;right:-6px;background:var(--leaf);color:#fff;font-size:11.5px;font-weight:800;
+  padding:3px 9px;border-radius:999px;box-shadow:0 2px 0 var(--leaf-d);display:none}
+.post.visited .done{display:block}
+.scene{width:100%;display:block;margin:-6px 0 6px}
+
+/* carousel */
+.carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:4px 4px 14px;
+  margin:0 -4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.carousel::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center}
+.slide .card{margin-bottom:6px;min-height:100%}
+.ctrl{display:flex;align-items:center;gap:10px}
+.ctrl .btn{margin:0;font-size:16px;padding:13px}
+.beans{display:flex;justify-content:center;gap:9px;margin:4px 0 14px}
+.beans i{width:14px;height:18px;border-radius:50%;background:rgba(255,248,232,.9);border:2px solid var(--wood-l);transition:.25s}
+.beans i.on{background:#6b3e1f;border-color:#3d220f;transform:scale(1.2) rotate(20deg)}
+
+/* phin brew toy */
+.brew{display:flex;align-items:center;gap:14px;background:#fff;border-radius:16px;padding:10px 12px;margin-top:10px;border:2px dashed var(--cream-d)}
+.brew svg{flex:0 0 86px;height:110px}
+.brew .bbtn{border:0;background:var(--berry);color:#fff;font-weight:800;font-family:inherit;font-size:15px;
+  padding:10px 14px;border-radius:14px;box-shadow:0 4px 0 #8c2a1e;cursor:pointer}
+.brew .bbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #8c2a1e}
+.brew .msg{font-size:14px;color:var(--leaf-d);font-weight:700;margin-top:6px;min-height:20px}
+.drop{opacity:0}
+.brewing .drop{animation:drip 1s ease-in infinite}
+.brewing .drop.d2{animation-delay:.5s}
+@keyframes drip{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(26px)}}
+#coffeeLevel{transition:all 4s linear}
+
+/* drinks grid & spaces */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.drink{background:var(--cream);border-radius:18px;border:2px solid var(--cream-d);box-shadow:0 5px 0 rgba(94,58,28,.3),0 10px 18px rgba(0,0,0,.1);overflow:hidden;cursor:pointer;text-align:left;padding:0;font-family:inherit;color:inherit}
+.drink .fig{aspect-ratio:1/1;margin:0;border:0;border-radius:0;box-shadow:none}
+.drink .kind{position:absolute;left:8px;top:8px;z-index:2;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;color:#fff;background:var(--wood)}
+.drink .kind.new{background:var(--leaf)}
+.drink .nm{padding:9px 10px 2px;font-weight:800;color:var(--wood-d);font-size:15px;line-height:1.3}
+.drink .vn{padding:0 10px 10px;font-size:12.5px;color:var(--muted);font-weight:600}
+.drink .ds{display:none;padding:0 10px 12px;font-size:13.5px;line-height:1.55}
+.drink.open .ds{display:block}
+.drink.open{grid-column:1/-1}
+.drink.open .fig{aspect-ratio:16/10}
+.tapme{text-align:center;font-size:13px;color:var(--wood-d);margin:-8px 0 10px}
+.quote{text-align:center;font-weight:700;color:var(--wood-d);background:linear-gradient(#fff3cf,var(--cream))}
+html[lang="vi"] .drink .vn{display:none}
+
+/* arts */
+.item{border-top:2px dashed var(--cream-d);padding-top:14px;margin-top:14px}
+.item h4{margin:0 0 4px;font-size:17px;color:var(--leaf-d)}
+.credit{background:#fff;border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.6;color:var(--muted);margin-top:10px;border-left:4px solid var(--sun)}
+.credit b{color:var(--ink)}
+
+/* stage */
+.stage{position:relative;border-radius:26px;overflow:hidden;padding:76px 14px 8px;margin-bottom:18px;border:4px solid var(--wood-d);box-shadow:var(--shadow);
+  background:radial-gradient(ellipse at 50% 18%,#ffe9a8 0,#e06a3a 38%,#7a2414 75%,#3b0f08 100%)}
+.curtain{position:absolute;left:0;right:0;top:0;height:64px;pointer-events:none}
+.beam{position:absolute;top:0;width:120px;height:100%;background:linear-gradient(rgba(255,240,180,.35),transparent 70%);
+  clip-path:polygon(45% 0,55% 0,100% 100%,0 100%);pointer-events:none;mix-blend-mode:screen;opacity:.6;transition:opacity .4s}
+.beam.b1{left:4%;transform:rotate(-12deg)}.beam.b2{right:4%;transform:rotate(12deg)}
+.stage.live .beam{opacity:1;animation:sway 3s ease-in-out infinite alternate}
+@keyframes sway{to{filter:brightness(1.3)}}
+.stagenote{position:relative;color:#fff3d6;text-align:center;margin:0 6px 12px;font-size:13.5px}
+.track{position:relative;background:rgba(255,248,232,.97);border-radius:18px;padding:14px;margin-bottom:12px;transition:transform .2s}
+.track.playing{transform:scale(1.02);box-shadow:0 0 0 3px var(--sun),0 8px 22px rgba(0,0,0,.25)}
+.track .row{display:flex;align-items:center;gap:12px}
+.play{flex:0 0 58px;height:58px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(#ff7a5c,var(--berry));box-shadow:0 5px 0 #8c2a1e;display:grid;place-items:center}
+.play:active{transform:translateY(3px);box-shadow:0 2px 0 #8c2a1e}
+.play svg{width:24px;height:24px;fill:#fff}
+.play[disabled]{background:#c9bba6;box-shadow:0 5px 0 #9a8a72}
+.track h3{margin:0;font-size:17px;color:var(--wood-d)}
+.eq{display:flex;gap:3px;align-items:flex-end;height:22px;margin-left:auto}
+.eq i{width:4px;height:4px;background:var(--berry);border-radius:2px}
+.track.playing .eq i{animation:eq .8s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.2s!important}.eq i:nth-child(3){animation-delay:.4s!important}.eq i:nth-child(4){animation-delay:.1s!important}
+@keyframes eq{from{height:4px}to{height:22px}}
+.bar{position:relative;height:28px;margin-top:6px;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none}
+.bar:before{content:"";position:absolute;left:0;right:0;top:10px;height:8px;background:var(--cream-d);border-radius:5px}
+.bar i{position:absolute;left:0;top:10px;height:8px;width:0;border-radius:5px;background:linear-gradient(90deg,var(--sun),var(--berry))}
+.bar b{position:absolute;top:4px;left:0;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#fff;border:3px solid var(--berry);box-shadow:0 2px 5px rgba(0,0,0,.25);transition:transform .15s}
+.bar.drag b{transform:scale(1.3)}
+.time{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.skip{border:0;background:var(--cream-d);color:var(--wood-d);font-family:inherit;font-weight:800;font-size:12.5px;padding:6px 10px;border-radius:999px;cursor:pointer}
+.skip:active{transform:translateY(1px)}
+.skips{display:flex;gap:8px}
+.soon{font-size:13px;color:var(--berry);font-weight:600;margin-top:8px}
+
+/* thanks postcard */
+.postcard{background:var(--cream);border-radius:24px;padding:24px 18px 22px;text-align:center;
+  border:3px solid var(--wood);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.postcard:before{content:"";position:absolute;inset:8px;border:2px dashed var(--wood-l);border-radius:18px;pointer-events:none}
+.stamp{position:absolute;top:16px;right:16px;width:58px;height:66px;background:#fff;padding:4px;transform:rotate(6deg);
+  box-shadow:0 2px 6px rgba(0,0,0,.15);border:2px dotted var(--wood-l)}
+.stamp div{width:100%;height:100%;background:linear-gradient(#ffe39a,#f6c445);display:grid;place-items:center}
+.postcard .logos{box-shadow:none;background:transparent;padding:0;margin:4px auto 6px}
+.postcard .logos img{height:54px}
+.postcard h2{font-size:21px;color:var(--wood-d);margin:12px 0 8px}
+.postcard p{line-height:1.75;margin:8px 4px}
+.postcard .from{margin-top:16px;font-weight:700;color:var(--leaf-d);font-size:14.5px;line-height:1.6}
+.postcard .date{color:var(--muted);font-size:13.5px;margin-top:6px}
+.hint{text-align:center;color:var(--wood-d);font-size:14px;margin:12px 0;background:rgba(255,248,232,.85);border-radius:999px;padding:6px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:conf 2.4s ease-in forwards}
+@keyframes conf{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
+  .drift{display:none}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <i class="cloud" style="top:9%;left:0;width:90px;height:26px;animation-delay:-12s"></i>
+  <i class="cloud" style="top:20%;left:0;width:64px;height:20px;animation-duration:80s;animation-delay:-50s"></i>
+  <i class="cloud" style="top:31%;left:0;width:110px;height:30px;animation-duration:95s;animation-delay:-30s"></i>
+  <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+    <circle cx="330" cy="70" r="34" fill="#ffe08a" opacity=".9"/>
+    <path d="M0 150 C80 100 150 120 220 140 C290 160 340 110 400 120 V300 H0Z" fill="#b9dc8e"/>
+    <path d="M0 190 C70 160 140 175 200 190 C270 208 330 165 400 175 V300 H0Z" fill="#8fc65f"/>
+    <g stroke="#6fae47" stroke-width="2" opacity=".7" fill="none">
+      <path d="M0 225 C90 205 170 220 260 232 C320 240 360 222 400 220"/><path d="M0 250 C90 232 180 246 270 256 C330 262 370 248 400 246"/>
+    </g>
+    <path d="M0 240 C90 215 180 235 260 245 C330 254 370 236 400 232 V300 H0Z" fill="#6fae47"/>
+    <g fill="#4f9a3c"><circle cx="40" cy="232" r="14"/><circle cx="58" cy="236" r="10"/><circle cx="350" cy="228" r="13"/><circle cx="368" cy="232" r="9"/></g>
+    <g fill="#c8402f"><circle cx="36" cy="228" r="2.5"/><circle cx="46" cy="236" r="2.5"/><circle cx="352" cy="224" r="2.5"/><circle cx="360" cy="232" r="2.5"/></g>
+  </svg>
+</div>
+<div class="drift" id="drift" aria-hidden="true"></div>
+<div class="app">
+
+<header class="topbar">
+  <button class="iconbtn hidden" id="backBtn" aria-label="Back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#5e3a1c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button class="iconbtn hidden" id="homeBtn" aria-label="Home">
+    <svg viewBox="0 0 24 24" fill="#5e3a1c"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></svg>
+  </button>
+  <div class="spacer"></div>
+  <div class="lang" role="group" aria-label="Language">
+    <button data-lang="zh">中</button><button data-lang="en">EN</button><button data-lang="vi">VI</button>
+  </div>
+</header>
+
+<!-- ============ SPLASH ============ -->
+<section class="screen" id="s-home">
+  <div class="hero">
+    <div class="logos">
+      <img src="assets/logo-ussh.webp" alt="USSH, VNU-HCM">
+      <img src="assets/logo-khoa.webp" alt="Faculty of English Linguistics and Literature">
+    </div>
+    <svg class="art" viewBox="0 0 380 190" aria-hidden="true">
+      <!-- stilt hut -->
+      <g transform="translate(18 40)">
+        <rect x="14" y="70" width="6" height="40" fill="#7a4a24"/><rect x="88" y="70" width="6" height="40" fill="#7a4a24"/>
+        <rect x="10" y="50" width="88" height="26" rx="3" fill="#c98f55"/>
+        <path d="M0 54 L54 10 L108 54Z" fill="#e8bd66" stroke="#a57a32" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M20 44 L54 18 L88 44" stroke="#d1a24a" stroke-width="2" fill="none"/>
+        <rect x="46" y="56" width="16" height="20" fill="#6b3e1f"/>
+      </g>
+      <!-- conical hat -->
+      <g transform="translate(150 98)">
+        <ellipse cx="40" cy="44" rx="44" ry="7" fill="rgba(0,0,0,.12)"/>
+        <path d="M0 40 L40 2 L80 40Z" fill="#f4d98f" stroke="#b8913e" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M14 28 L66 28 M24 18 L56 18" stroke="#cfa64e" stroke-width="2"/>
+      </g>
+      <!-- coffee tree -->
+      <g transform="translate(262 40)">
+        <path d="M50 140 C48 100 52 60 50 20" stroke="#5c3b1f" stroke-width="6" fill="none"/>
+        <g fill="#4f9a3c">
+          <ellipse cx="30" cy="40" rx="20" ry="9" transform="rotate(-25 30 40)"/><ellipse cx="72" cy="34" rx="20" ry="9" transform="rotate(25 72 34)"/>
+          <ellipse cx="26" cy="74" rx="20" ry="9" transform="rotate(-20 26 74)"/><ellipse cx="76" cy="68" rx="20" ry="9" transform="rotate(20 76 68)"/>
+          <ellipse cx="50" cy="16" rx="12" ry="18" fill="#5fae49"/>
+        </g>
+        <g fill="#c8402f"><circle cx="42" cy="52" r="6"/><circle cx="54" cy="56" r="6" fill="#d9523d"/><circle cx="46" cy="62" r="6"/>
+          <circle cx="40" cy="88" r="6" fill="#d9523d"/><circle cx="52" cy="92" r="6"/><circle cx="58" cy="84" r="6"/></g>
+      </g>
+      <!-- guitar -->
+      <g transform="translate(232 108) rotate(-18)">
+        <rect x="18" y="-34" width="6" height="42" fill="#7a4a24"/><rect x="15" y="-42" width="12" height="10" rx="2" fill="#5e3a1c"/>
+        <path d="M21 4 C4 4 4 22 12 26 C2 32 6 56 21 56 C36 56 40 32 30 26 C38 22 38 4 21 4Z" fill="#e2a65a" stroke="#8a5a32" stroke-width="2"/>
+        <circle cx="21" cy="30" r="5" fill="#5e3a1c"/>
+      </g>
+      <text x="130" y="60" font-size="28" fill="#5e3a1c">♪</text><text x="205" y="40" font-size="22" fill="#c8402f">♫</text>
+    </svg>
+    <div class="sign"><h1 data-i="home.title"></h1></div>
+    <div class="ribbon" data-i="home.gift"></div>
+    <p class="lead" data-i="home.sub"></p>
+    <button class="btn pulse" data-go="hub"><span data-i="home.start"></span></button>
+  </div>
+</section>
+
+<!-- ============ HUB ============ -->
+<section class="screen" id="s-hub">
+  <div class="sign"><h2 data-i="hub.title"></h2><div class="sub" data-i="hub.sub"></div></div>
+
+  <div class="card post" data-go="coffee" role="button" tabindex="0">
+    <span class="done" data-i="hub.done"></span>
+    <div class="ic" style="background:#f7dcc0">
+      <svg viewBox="0 0 48 48"><path d="M10 20h24v10a10 10 0 0 1-10 10h-4a10 10 0 0 1-10-10z" fill="#fff" stroke="#8a5a32" stroke-width="2.5"/><path d="M34 23h3a4 4 0 0 1 0 8h-3" stroke="#8a5a32" stroke-width="2.5" fill="none"/><path d="M12 30h20a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8z" fill="#6b3e1f"/><path d="M17 8c-2 3 2 5 0 8M24 6c-2 3 2 5 0 8" stroke="#b07a46" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </div>
+    <div><h3 data-i="hub.coffee"></h3><p data-i="hub.coffeeSub"></p></div><span class="go">›</span>
+  </div>
+
+  <div class="card post" data-go="arts" role="button" tabindex="0">
+    <span class="done" data-i="hub.done"></span>
+    <div class="ic" style="background:#d9ecc4">
+      <svg viewBox="0 0 48 48"><ellipse cx="24" cy="33" rx="18" ry="5" fill="#d9a441"/><ellipse cx="24" cy="31" rx="18" ry="5" fill="#f6c445"/><path d="M14 22c6-10 14-10 20 0" stroke="#c8402f" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="24" cy="12" r="4" fill="#2f6fd0"/></svg>
+    </div>
+    <div><h3 data-i="hub.arts"></h3><p data-i="hub.artsSub"></p></div><span class="go">›</span>
+  </div>
+
+  <div class="card post" data-go="stage" role="button" tabindex="0">
+    <span class="done" data-i="hub.done"></span>
+    <div class="ic" style="background:#ffd9cc">
+      <svg viewBox="0 0 48 48"><path d="M4 6h40v6c-6 8-14 8-20 0-6 8-14 8-20 0z" fill="#c8402f"/><rect x="6" y="34" width="36" height="6" rx="2" fill="#8a5a32"/><circle cx="24" cy="25" r="8" fill="#f6c445"/><path d="M21 21l7 4-7 4z" fill="#c8402f"/></svg>
+    </div>
+    <div><h3 data-i="hub.stage"></h3><p data-i="hub.stageSub"></p></div><span class="go">›</span>
+  </div>
+
+  <div class="card post" data-go="thanks" role="button" tabindex="0">
+    <span class="done" data-i="hub.done"></span>
+    <div class="ic" style="background:#fff0b8">
+      <svg viewBox="0 0 48 48"><rect x="6" y="12" width="36" height="26" rx="4" fill="#fff" stroke="#8a5a32" stroke-width="2.5"/><path d="M7 14l17 13 17-13" stroke="#8a5a32" stroke-width="2.5" fill="none"/><circle cx="24" cy="30" r="5" fill="#c8402f"/></svg>
+    </div>
+    <div><h3 data-i="hub.thanks"></h3><p data-i="hub.thanksSub"></p></div><span class="go">›</span>
+  </div>
+</section>
+
+<!-- ============ COFFEE ============ -->
+<section class="screen" id="s-coffee">
+  <div class="sign"><h2 data-i="coffee.title"></h2><div class="sub" data-i="coffee.sub"></div></div>
+  <div class="carousel" id="carousel"></div>
+  <div class="beans" id="dots"></div>
+  <div class="ctrl">
+    <button class="btn wood" id="prevBtn"><span data-i="nav.prev"></span></button>
+    <button class="btn" id="nextBtn"><span data-i="nav.next"></span></button>
+  </div>
+  <button class="btn sun" id="coffeeDone" style="display:none"><span data-i="nav.toDrinks"></span></button>
+
+  <div class="sign" id="drinks"><h2 data-i="drinks.title"></h2><div class="sub" data-i="drinks.sub"></div></div>
+  <div class="grid" id="drinkGrid"></div>
+
+  <div class="sign"><h2 data-i="spaces.title"></h2><div class="sub" data-i="spaces.sub"></div></div>
+  <div id="spaceList"></div>
+  <div class="card quote"><p data-i="spaces.end"></p></div>
+
+  <button class="btn sun" data-go="hub"><span data-i="nav.hub"></span></button>
+</section>
+
+<!-- ============ ARTS ============ -->
+<section class="screen" id="s-arts">
+  <div class="sign"><h2 data-i="arts.title"></h2></div>
+  <div class="card"><p data-i="arts.intro"></p></div>
+
+  <div class="card">
+    <span class="tag" data-i="arts.p1tag"></span>
+    <h3><span data-i="song1.name"></span><span class="orig">Bài ca đất phương Nam</span></h3>
+    <p data-i="arts.p1flow"></p>
+
+    <div class="item">
+      <div class="fig tall" data-img="assets/mua-mam.webp">
+        <svg viewBox="0 0 100 60"><ellipse cx="50" cy="40" rx="40" ry="10" fill="#d9a441"/><ellipse cx="50" cy="37" rx="40" ry="10" fill="#f6c445"/></svg>
+        <span class="cap" data-i="img.note"></span>
+      </div>
+      <h4 data-i="mam.name"></h4>
+      <p data-i="mam.desc"></p>
+    </div>
+
+    <div class="item">
+      <div class="fig tall2" data-img="assets/vovinam.webp">
+        <svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg>
+        <span class="cap" data-i="img.note"></span>
+      </div>
+      <h4 data-i="vov.name"></h4>
+      <p data-i="vov.desc"></p>
+    </div>
+
+    <div class="item">
+      <h4 data-i="song.about"></h4>
+      <div class="fig" data-img="assets/lnv.webp">
+        <svg viewBox="0 0 100 60"><text x="40" y="40" font-size="30" fill="#5e3a1c">♪</text></svg>
+        <span class="cap" data-i="img.noteLnv"></span>
+      </div>
+      <p data-i="song1.desc"></p>
+      <div class="fig" data-img="assets/dat-phuong-nam.webp">
+        <svg viewBox="0 0 100 60"><path d="M0 40 C30 30 70 50 100 38 V60 H0Z" fill="#4f9a3c"/></svg>
+        <span class="cap" data-i="img.noteDpn"></span>
+      </div>
+      <div class="credit" data-i="song1.credit"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag" data-i="arts.p2tag"></span>
+    <h3><span data-i="song2.name"></span><span class="orig">Nối vòng tay lớn</span></h3>
+    <p data-i="arts.p2flow"></p>
+    <div class="item">
+      <h4 data-i="song.about"></h4>
+      <div class="fig" data-img="assets/tcs.webp">
+        <svg viewBox="0 0 100 60"><text x="40" y="40" font-size="30" fill="#5e3a1c">♫</text></svg>
+        <span class="cap" data-i="img.noteTcs"></span>
+      </div>
+      <p data-i="song2.desc"></p>
+      <div class="credit" data-i="song2.credit"></div>
+    </div>
+  </div>
+
+  <button class="btn" data-go="stage"><span data-i="nav.toStage"></span></button>
+  <button class="btn sun" data-go="hub"><span data-i="nav.hub"></span></button>
+</section>
+
+<!-- ============ STAGE ============ -->
+<section class="screen" id="s-stage">
+  <div class="sign"><h2 data-i="stage.title"></h2></div>
+  <div class="stage" id="stageBox">
+    <svg class="curtain" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 0H400V22C380 40 360 40 340 22 320 40 300 40 280 22 260 40 240 40 220 22 200 40 180 40 160 22 140 40 120 40 100 22 80 40 60 40 40 22 20 40 10 40 0 30Z" fill="#9e1f12"/>
+      <path d="M0 0H400V10H0Z" fill="#c9a03c"/>
+      <g fill="#fff3b0">
+        <circle cx="30" cy="5" r="3"/><circle cx="80" cy="5" r="3"/><circle cx="130" cy="5" r="3"/><circle cx="180" cy="5" r="3"/><circle cx="230" cy="5" r="3"/><circle cx="280" cy="5" r="3"/><circle cx="330" cy="5" r="3"/><circle cx="380" cy="5" r="3"/>
+      </g>
+    </svg>
+    <div class="beam b1"></div><div class="beam b2"></div>
+    <p class="stagenote" data-i="stage.note"></p>
+
+    <div class="track" data-track="0">
+      <div class="row">
+        <button class="play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg></button>
+        <div><h3 data-i="song1.name"></h3><div class="orig">Bài ca đất phương Nam</div></div>
+        <div class="eq"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="bar" role="slider" aria-label="Seek" tabindex="0"><i></i><b></b></div>
+      <div class="time"><span class="cur">0:00</span><span class="skips"><button class="skip" data-skip="-10">« 10s</button><button class="skip" data-skip="10">10s »</button></span><span class="dur">–:––</span></div>
+      <p class="muted" data-i="song1.short"></p>
+      <div class="soon" data-i="stage.soon" hidden></div>
+      <audio preload="none" playsinline src="assets/song-1.mp3"></audio>
+    </div>
+
+    <div class="track" data-track="1">
+      <div class="row">
+        <button class="play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg></button>
+        <div><h3 data-i="song2.name"></h3><div class="orig">Nối vòng tay lớn</div></div>
+        <div class="eq"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="bar" role="slider" aria-label="Seek" tabindex="0"><i></i><b></b></div>
+      <div class="time"><span class="cur">0:00</span><span class="skips"><button class="skip" data-skip="-10">« 10s</button><button class="skip" data-skip="10">10s »</button></span><span class="dur">–:––</span></div>
+      <p class="muted" data-i="song2.short"></p>
+      <div class="soon" data-i="stage.soon" hidden></div>
+      <audio preload="none" playsinline src="assets/song-2.mp3"></audio>
+    </div>
+  </div>
+  <button class="btn sun" data-go="thanks"><span data-i="nav.toThanks"></span></button>
+  <button class="btn wood" data-go="hub"><span data-i="nav.hub"></span></button>
+</section>
+
+<!-- ============ THANKS ============ -->
+<section class="screen" id="s-thanks">
+  <div class="postcard">
+    <div class="stamp"><div><svg viewBox="0 0 40 40" width="34"><ellipse cx="20" cy="20" rx="10" ry="14" fill="#6b3e1f" transform="rotate(25 20 20)"/><path d="M14 9c8 7 3 14 12 22" stroke="#3d220f" stroke-width="2.5" fill="none"/></svg></div></div>
+    <div class="logos">
+      <img src="assets/logo-ussh.webp" alt="USSH, VNU-HCM">
+      <img src="assets/logo-khoa.webp" alt="Faculty of English Linguistics and Literature">
+    </div>
+    <h2 data-i="thanks.title"></h2>
+    <p data-i="thanks.body"></p>
+    <div class="from">
+      <div data-i="thanks.from"></div>
+      <div>Trường Đại học Khoa học Xã hội và Nhân văn – ĐHQG TP.HCM</div>
+    </div>
+    <div class="date" data-i="thanks.date"></div>
+  </div>
+  <p class="hint" data-i="thanks.hint"></p>
+  <button class="btn sun" data-go="hub"><span data-i="nav.hub"></span></button>
+</section>
+
+</div>
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<script>
+/* =========================================================
+   CONTENT — edit text here. zh = 中文 (default), en, vi
+   ========================================================= */
+var T = {
+ "home.title":{zh:"欢迎来到越南文化农场",en:"Welcome to the Vietnamese Cultural Farm",vi:"Chào mừng bạn đến Nông trại Văn hóa Việt Nam"},
+ "home.gift":{zh:"送给苏州大学朋友们的小礼物",en:"A small gift for our friends at Soochow University",vi:"Món quà nhỏ gửi các bạn Đại học Tô Châu"},
+ "home.sub":{zh:"一起探索越南咖啡的风味，以及我们演出中的舞蹈、武术与歌曲。",en:"Explore the flavors of Vietnamese coffee, and the dance, martial art and songs from our performance.",vi:"Cùng khám phá hương vị cà phê Việt Nam, cùng điệu múa, môn võ và những bài hát trong tiết mục của chúng tôi."},
+ "home.start":{zh:"开始探索 ▶",en:"Start Exploring ▶",vi:"Bắt đầu ▶"},
+
+ "hub.title":{zh:"文化农场",en:"The Cultural Farm",vi:"Nông trại Văn hóa"},
+ "hub.sub":{zh:"选择一个区域",en:"Choose a place to visit",vi:"Chọn một khu để ghé thăm"},
+ "hub.done":{zh:"已参观 ✓",en:"Visited ✓",vi:"Đã ghé ✓"},
+ "hub.coffee":{zh:"咖啡农场",en:"Coffee Farm",vi:"Trang trại Cà phê"},
+ "hub.coffeeSub":{zh:"一杯越南滴滤咖啡的旅程",en:"The journey of a Vietnamese phin coffee",vi:"Hành trình ly cà phê phin"},
+ "hub.arts":{zh:"我们的演出",en:"Our Performance",vi:"Tiết mục của chúng tôi"},
+ "hub.artsSub":{zh:"托盘舞、越武道与两首歌",en:"Tray Dance, Vovinam and two songs",vi:"Múa mâm, Vovinam và hai bài hát"},
+ "hub.stage":{zh:"音乐舞台",en:"Music Stage",vi:"Sân khấu Âm nhạc"},
+ "hub.stageSub":{zh:"聆听演出的音乐",en:"Listen to the music of the show",vi:"Nghe nhạc của tiết mục"},
+ "hub.thanks":{zh:"感谢卡",en:"Thank-you Card",vi:"Thiệp cảm ơn"},
+ "hub.thanksSub":{zh:"写给苏州大学的朋友们",en:"For our friends at Soochow University",vi:"Gửi các bạn Đại học Tô Châu"},
+
+ "coffee.title":{zh:"咖啡农场",en:"Coffee Farm",vi:"Trang trại Cà phê"},
+ "coffee.sub":{zh:"一滴一滴，一口一口",en:"Drop by drop, sip by sip",vi:"Từng giọt, từng ngụm"},
+ "drinks.title":{zh:"越南咖啡菜单",en:"Vietnamese Coffee Menu",vi:"Các món cà phê"},
+ "drinks.sub":{zh:"点一下，了解每一杯",en:"Tap a cup to learn more",vi:"Chạm vào từng ly để xem thêm"},
+ "drinks.classic":{zh:"经典",en:"Classic",vi:"Kinh điển"},
+ "drinks.new":{zh:"新潮",en:"New wave",vi:"Mới"},
+ "spaces.title":{zh:"咖啡空间",en:"Coffee in Spaces",vi:"Không gian cà phê"},
+ "spaces.sub":{zh:"在哪里喝咖啡？",en:"Where do we drink coffee?",vi:"Người Việt uống cà phê ở đâu?"},
+ "spaces.end":{zh:"越南咖啡文化，在这些不同的空间里延续。",en:"Vietnamese coffee culture is kept alive through all of these different spaces.",vi:"Văn hóa cà phê Việt Nam được tiếp nối qua tất cả những không gian ấy."},
+ "nav.toDrinks":{zh:"看看越南咖啡菜单 ↓",en:"See the coffee menu ↓",vi:"Xem các món cà phê ↓"},
+ "img.noteLnv":{zh:"示意图片 · 作曲家 Lư Nhất Vũ",en:"Illustrative photo · composer Lư Nhất Vũ",vi:"Ảnh minh họa · nhạc sĩ Lư Nhất Vũ"},
+ "img.noteDpn":{zh:"示意图片 · 越南南部的湿地",en:"Illustrative photo · wetlands of southern Vietnam",vi:"Ảnh minh họa · vùng đất ngập nước Nam Bộ"},
+ "brew.btn":{zh:"点我冲泡 ☕",en:"Tap to brew ☕",vi:"Bấm để pha ☕"},
+ "brew.wait":{zh:"一滴、一滴……请耐心等待",en:"Drop by drop… be patient",vi:"Từng giọt, từng giọt… kiên nhẫn nhé"},
+ "brew.done":{zh:"你的越南咖啡好了！",en:"Your Vietnamese coffee is ready!",vi:"Ly cà phê của bạn đã xong!"},
+
+ "img.note":{zh:"示意图片",en:"Illustrative photo",vi:"Ảnh minh họa"},
+ "img.noteTcs":{zh:"示意图片 · 作曲家 Trịnh Công Sơn",en:"Illustrative photo · composer Trịnh Công Sơn",vi:"Ảnh minh họa · nhạc sĩ Trịnh Công Sơn"},
+
+ "arts.title":{zh:"我们的演出",en:"Our Performance",vi:"Tiết mục của chúng tôi"},
+ "arts.intro":{zh:"这是一个连贯的节目，分为两个部分。全体成员身穿英语语言文学系的白色Polo衫。",en:"This is one continuous performance in two parts. Our team wears the white polo shirts of the Faculty of English Linguistics and Literature.",vi:"Đây là một tiết mục liên khúc gồm hai phần. Cả nhóm mặc áo polo trắng của Khoa Ngữ văn Anh."},
+ "arts.p1tag":{zh:"第一部分",en:"Part 1",vi:"Phần 1"},
+ "arts.p2tag":{zh:"第二部分",en:"Part 2",vi:"Phần 2"},
+ "arts.p1flow":{zh:"合唱开场，托盘舞随着歌声展开，随后转入越武道套路表演。合唱一直唱完整首歌。",en:"The choir opens the song. The Tray Dance unfolds with the singing, then flows into a Vovinam form. The choir sings all the way to the end.",vi:"Tốp ca mở màn, múa mâm diễn cùng lời hát, sau đó chuyển sang đi quyền Vovinam. Tốp ca hát trọn vẹn cả bài."},
+ "arts.p2flow":{zh:"在这首歌的摇滚版本中，我们以一段现代舞结束演出。",en:"We close the show with a modern dance to a rock version of this song.",vi:"Chúng tôi khép lại tiết mục bằng phần nhảy hiện đại trên nền bản rock của bài hát này."},
+
+ "mam.name":{zh:"托盘舞（Múa mâm）",en:"Tray Dance (Múa mâm)",vi:"Múa mâm"},
+ "mam.desc":{zh:"越南的民间舞蹈，舞者以托盘为道具，带来欢乐的节日气氛，象征团结与分享。",en:"A Vietnamese folk dance performed with trays. It brings a joyful, festive mood and expresses togetherness and sharing.",vi:"Điệu múa dân gian Việt Nam dùng mâm làm đạo cụ, mang không khí lễ hội vui tươi, thể hiện sự gắn kết và sẻ chia."},
+ "vov.name":{zh:"越武道（Vovinam）",en:"Vovinam",vi:"Võ Vovinam"},
+ "vov.desc":{zh:"越南的武术，以蓝色武服和优美的腿法著称，融合柔韧与力量，体现尚武精神。我们的一位女同学将身穿越武道武服表演套路。",en:"A Vietnamese martial art known for its blue uniform and graceful leg techniques. It combines flexibility and strength in a spirit of discipline and respect. One of our members performs a form in the Vovinam uniform.",vi:"Môn võ Việt Nam nổi bật với võ phục xanh lam và các đòn chân đẹp mắt, kết hợp sự dẻo dai và sức mạnh, thể hiện tinh thần thượng võ. Một bạn nữ trong nhóm sẽ đi quyền trong võ phục Vovinam."},
+
+ "song.about":{zh:"关于这首歌",en:"About the song",vi:"Về bài hát"},
+ "song1.name":{zh:"《南方土地之歌》",en:"“Song of the Southern Land”",vi:"Bài ca đất phương Nam"},
+ "song1.desc":{zh:"这首歌带有越南南部民歌的韵味，描绘宁静的河乡风光，以及热情好客的南方人。",en:"With the flavor of southern Vietnamese folk songs, it paints peaceful river landscapes and the warm hospitality of the people of the South.",vi:"Bài hát mang âm hưởng dân ca Nam Bộ, khắc họa vẻ đẹp sông nước bình dị và con người phương Nam hiếu khách."},
+ "song1.short":{zh:"南部民歌韵味 · 河乡风光与热情的人们",en:"Southern folk flavor · river landscapes and warm people",vi:"Âm hưởng dân ca Nam Bộ · sông nước và con người hiếu khách"},
+ "song1.credit":{zh:"<b>作曲：</b>Lư Nhất Vũ · <b>作词：</b>Lê Giang<br><b>伴奏编曲：</b>Tùng Cedrus (DTAP)、Xẻ (INUS)，来自 Phương Mỹ Chi 的现场演出版本",en:"<b>Music:</b> Lư Nhất Vũ · <b>Lyrics:</b> Lê Giang<br><b>Backing arrangement:</b> Tùng Cedrus (DTAP) & Xẻ (INUS), from Phương Mỹ Chi’s live show",vi:"<b>Nhạc:</b> Lư Nhất Vũ · <b>Lời:</b> Lê Giang<br><b>Bản phối nền:</b> Tùng Cedrus (DTAP) & Xẻ (INUS), từ show live của Phương Mỹ Chi"},
+
+ "song2.name":{zh:"《手牵手》",en:"“Joining Hands”",vi:"Nối vòng tay lớn"},
+ "song2.desc":{zh:"一首欢快的歌曲，传递友谊与团结，让人们手牵着手，彼此更加靠近。",en:"An uplifting song about friendship and unity, inviting people to join hands and come closer together.",vi:"Bài hát sôi nổi về tình bạn và sự đoàn kết, mời gọi mọi người nắm tay nhau, xích lại gần nhau hơn."},
+ "song2.short":{zh:"摇滚版 · 友谊与团结",en:"Rock version · friendship and unity",vi:"Bản rock · tình bạn và đoàn kết"},
+ "song2.credit":{zh:"<b>词曲：</b>Trịnh Công Sơn<br><b>伴奏编曲：</b>UNLIMITED",en:"<b>Music & lyrics:</b> Trịnh Công Sơn<br><b>Backing arrangement:</b> UNLIMITED",vi:"<b>Sáng tác:</b> Trịnh Công Sơn<br><b>Phối khí nhạc nền:</b> UNLIMITED"},
+
+ "stage.title":{zh:"音乐舞台",en:"Music Stage",vi:"Sân khấu Âm nhạc"},
+ "stage.note":{zh:"这里播放的是我们演出所用音乐的原版。",en:"These are the original versions of the music behind our performance.",vi:"Đây là bản nhạc gốc làm nền cho tiết mục của chúng tôi."},
+ "stage.soon":{zh:"音频暂时无法播放。",en:"Audio is not available right now.",vi:"Hiện chưa phát được âm thanh."},
+
+ "thanks.title":{zh:"谢谢你们，苏州大学的朋友们！",en:"Thank you, friends at Soochow University!",vi:"Cảm ơn các bạn Đại học Tô Châu!"},
+ "thanks.body":{zh:"谢谢你们的热情与友谊。希望这杯越南咖啡和这些旋律，能让你们记住我们这次美好的相遇。",en:"Thank you for your warmth and friendship. We hope this cup of Vietnamese coffee and these melodies will help you remember our wonderful meeting.",vi:"Cảm ơn sự nồng hậu và tình bạn của các bạn. Mong rằng ly cà phê Việt và những giai điệu này sẽ giúp các bạn nhớ về cuộc gặp gỡ đáng nhớ của chúng ta."},
+ "thanks.from":{zh:"越南胡志明市国家大学 人文社会科学大学",en:"University of Social Sciences and Humanities, VNU-HCM",vi:"Với tất cả sự trân trọng,"},
+ "thanks.date":{zh:"2026年11月 · 苏州",en:"November 2026 · Suzhou",vi:"Tháng 11/2026 · Tô Châu"},
+ "thanks.hint":{zh:"📸 截图保存这张卡片吧！",en:"📸 Take a screenshot to keep this card!",vi:"📸 Chụp màn hình để lưu tấm thiệp này nhé!"},
+
+ "nav.prev":{zh:"‹ 上一步",en:"‹ Prev",vi:"‹ Trước"},
+ "nav.next":{zh:"下一步 ›",en:"Next ›",vi:"Tiếp ›"},
+ "nav.hub":{zh:"返回农场",en:"Back to the Farm",vi:"Về Nông trại"},
+ "nav.toStage":{zh:"前往音乐舞台 ➔",en:"Go to the Music Stage ➔",vi:"Đến Sân khấu Âm nhạc ➔"},
+ "nav.toThanks":{zh:"打开感谢卡 ✉",en:"Open the Thank-you Card ✉",vi:"Mở thiệp cảm ơn ✉"}
+};
+
+var STEPS = [
+ {img:"assets/coffee-step1.webp",
+  t:{zh:"第1步 · 种植与采收",en:"Step 1 · Planting & Harvesting",vi:"Bước 1 · Trồng & Thu hoạch"},
+  d:{zh:"咖啡树种植在土壤肥沃、常年气候凉爽的高原地区。成熟的咖啡果呈鲜红色。",en:"Coffee trees grow in fertile highland regions with a cool climate all year round. Ripe coffee cherries turn bright red.",vi:"Cây cà phê được trồng ở những vùng cao nguyên đất đỏ màu mỡ, khí hậu mát mẻ quanh năm. Quả chín có màu đỏ tươi."}},
+ {img:"assets/coffee-step2.webp",
+  t:{zh:"第2步 · 咖啡豆加工",en:"Step 2 · Processing the Beans",vi:"Bước 2 · Chế biến hạt"},
+  d:{zh:"咖啡豆经过初步处理，在阳光下自然晒干，再精心挑选出品质最好的豆子。",en:"The beans are processed, dried naturally in the sun, and carefully sorted to keep only the best ones.",vi:"Hạt được sơ chế, phơi khô tự nhiên dưới nắng và tuyển chọn kỹ lưỡng để giữ lại những hạt tốt nhất."}},
+ {img:"assets/coffee-step3.webp",
+  t:{zh:"第3步 · 烘焙与研磨",en:"Step 3 · Roasting & Grinding",vi:"Bước 3 · Rang xay"},
+  d:{zh:"以合适的温度烘焙，唤醒咖啡独特的香气，然后研磨成粗细适中的咖啡粉。",en:"The beans are roasted at the right temperature to bring out their special aroma, then ground into a medium powder.",vi:"Hạt được rang ở nhiệt độ phù hợp để đánh thức hương thơm đặc trưng, rồi xay thành bột mịn vừa phải."}},
+ {img:"assets/coffee-step4.webp", brew:true,
+  t:{zh:"第4步 · 滴滤冲泡与品尝",en:"Step 4 · Phin Brewing & Enjoying",vi:"Bước 4 · Pha phin & Thưởng thức"},
+  d:{zh:"使用越南传统的滴滤壶（Phin），耐心等待咖啡一滴一滴落下，留住浓郁的风味。加入炼乳和冰块，味道更佳。",en:"Using a traditional Vietnamese phin filter, wait patiently as the coffee falls drop by drop to keep its rich flavor. It is best enjoyed with condensed milk and ice.",vi:"Dùng phin truyền thống, kiên nhẫn chờ từng giọt cà phê rơi chậm rãi để giữ trọn vị đậm đà. Ngon nhất khi thưởng thức cùng sữa đặc và đá."}},
+ {img:"assets/coffee-culture.webp",
+  t:{zh:"越南咖啡文化",en:"Vietnamese Coffee Culture",vi:"Văn hóa cà phê Việt Nam"},
+  d:{zh:"咖啡是越南人日常生活中熟悉的饮品。路边的小凳子、花园咖啡馆、书店咖啡馆，都是朋友相聚、交流分享的地方。",en:"Coffee is part of everyday life in Vietnam. Little stools on the sidewalk, garden cafés and book cafés are all places where friends meet and share.",vi:"Cà phê là thức uống quen thuộc hằng ngày của người Việt. Những chiếc ghế nhỏ vỉa hè, quán cà phê sân vườn, cà phê sách đều là nơi bạn bè gặp gỡ, sẻ chia."}}
+];
+var DRINKS = [
+ {img:"assets/drink-suada.webp", k:"classic", vn:"Cà phê sữa đá",
+  n:{zh:"冰炼乳咖啡",en:"Iced Milk Coffee",vi:"Cà phê sữa đá"},
+  d:{zh:"用滴滤壶冲出浓咖啡，再加入炼乳和冰块。这是最经典的越南咖啡。",en:"Strong phin coffee with sweetened condensed milk and ice. The classic Vietnamese coffee.",vi:"Cà phê phin đậm đà pha cùng sữa đặc và đá. Ly cà phê kinh điển của người Việt."}},
+ {img:"assets/drink-bacxiu.webp", k:"classic", vn:"Bạc xỉu",
+  n:{zh:"白咖啡（白底小啡）",en:"White Coffee",vi:"Bạc xỉu"},
+  d:{zh:"牛奶多、咖啡少。“Bạc xỉu”这个名字来自粤语“白底小啡”，意思是白色的杯底，加一点咖啡。",en:"Lots of milk, a little coffee. The name comes from the Cantonese “白底小啡”: a white glass with just a little coffee.",vi:"Nhiều sữa, ít cà phê. Tên gọi bắt nguồn từ tiếng Quảng Đông “bạc tẩy xỉu phé” (白底小啡): ly trắng, thêm chút cà phê."}},
+ {img:"assets/drink-trung.webp", k:"classic", vn:"Cà phê trứng",
+  n:{zh:"鸡蛋咖啡",en:"Egg Coffee",vi:"Cà phê trứng"},
+  d:{zh:"把蛋黄和糖打成绵密的奶油，盖在咖啡上，口感像甜点。它来自河内。",en:"Egg yolk whipped with sugar into a silky cream on top of coffee, like a dessert. It comes from Hanoi.",vi:"Lòng đỏ trứng đánh với đường thành lớp kem mịn phủ trên cà phê, như một món tráng miệng. Món này xuất xứ từ Hà Nội."}},
+ {img:"assets/drink-muoi.webp", k:"new", vn:"Cà phê muối",
+  n:{zh:"咸咖啡",en:"Salt Coffee",vi:"Cà phê muối"},
+  d:{zh:"在咖啡上加一层微咸的奶盖，咸中带甜，越喝越香。它来自顺化。",en:"A lightly salted cream on top of coffee: salty, sweet and smooth. It comes from Huế.",vi:"Lớp kem mằn mặn phủ trên cà phê, vị mặn ngọt hòa quyện. Món này xuất xứ từ Huế."}},
+ {img:"assets/drink-cotdua.webp", k:"new", vn:"Cà phê cốt dừa",
+  n:{zh:"椰子咖啡",en:"Coconut Coffee",vi:"Cà phê cốt dừa"},
+  d:{zh:"咖啡配上冰沙般的椰浆，清凉香甜，很适合炎热的天气。",en:"Coffee with icy, slushy coconut cream. Cool and sweet, perfect for hot days.",vi:"Cà phê cùng cốt dừa xay đá mát lạnh, béo ngọt, rất hợp ngày nắng nóng."}},
+ {img:"assets/drink-saurieng.webp", k:"new", vn:"Cà phê sầu riêng",
+  n:{zh:"榴莲咖啡",en:"Durian Coffee",vi:"Cà phê sầu riêng"},
+  d:{zh:"咖啡里加入榴莲浓郁的香味。喜欢榴莲的朋友一定要试试！",en:"Coffee with the rich aroma of durian. A must-try for durian lovers!",vi:"Cà phê thêm hương sầu riêng nồng nàn. Ai mê sầu riêng nhất định phải thử!"}}
+];
+var SPACES = [
+ {img:"assets/space-viahe.webp", vn:"Cà phê vỉa hè",
+  n:{zh:"路边咖啡",en:"Sidewalk Coffee",vi:"Cà phê vỉa hè"},
+  d:{zh:"坐在路边的小板凳上，一边喝咖啡，一边看街景。",en:"Sit on a low plastic stool by the street, sip your coffee and watch the city go by.",vi:"Ngồi ghế nhựa thấp bên đường, nhâm nhi cà phê và ngắm phố phường."}},
+ {img:"assets/space-vong.webp", vn:"Cà phê võng",
+  n:{zh:"吊床咖啡",en:"Hammock Coffee",vi:"Cà phê võng"},
+  d:{zh:"躺在吊床上喝咖啡、休息。常见于公路旁，是旅人歇脚的地方。",en:"Relax in a hammock with your coffee. Often found along highways as a rest stop for travelers.",vi:"Nằm võng thư giãn bên ly cà phê. Thường gặp ven quốc lộ, là chỗ dừng chân của khách đường xa."}},
+ {img:"assets/space-quan.webp", vn:"Quán cà phê hiện đại",
+  n:{zh:"现代咖啡馆",en:"Modern Cafés",vi:"Quán cà phê hiện đại"},
+  d:{zh:"宽敞舒适，适合学习、工作，也适合和朋友聊天。",en:"Spacious and comfortable, for studying, working and catching up with friends.",vi:"Rộng rãi, thoải mái, nơi học bài, làm việc và trò chuyện cùng bạn bè."}}
+];
+function renderMenu(){
+  document.getElementById("drinkGrid").innerHTML = DRINKS.map(function(x,i){
+    return '<button class="drink" data-drink="'+i+'"><div class="fig" data-img="'+x.img+'">'+BEAN_ICON+'<span class="kind'+(x.k==="new"?" new":"")+'">'+tr("drinks."+x.k)+'</span><span class="cap">'+tr("img.note")+'</span></div>'+
+      '<div class="nm">'+x.n[lang]+'</div><div class="vn">'+x.vn+'</div><div class="ds">'+x.d[lang]+'</div></button>';
+  }).join("");
+  document.getElementById("spaceList").innerHTML = SPACES.map(function(x){
+    return '<div class="card"><div class="fig" data-img="'+x.img+'">'+BEAN_ICON+'<span class="cap">'+tr("img.note")+'</span></div>'+
+      '<h3>'+x.n[lang]+'<span class="orig">'+x.vn+'</span></h3><p>'+x.d[lang]+'</p></div>';
+  }).join("");
+  if(current()==="coffee") document.querySelectorAll("#drinkGrid .fig, #spaceList .fig").forEach(loadFig);
+}
+document.addEventListener("click", function(e){
+  var d=e.target.closest(".drink"); if(!d) return;
+  var was=d.classList.contains("open");
+  document.querySelectorAll(".drink.open").forEach(function(o){ o.classList.remove("open"); });
+  if(!was){ d.classList.add("open"); d.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+});
+var BEAN_ICON='<svg viewBox="0 0 100 60"><ellipse cx="50" cy="30" rx="14" ry="20" fill="#6b3e1f" transform="rotate(25 50 30)"/></svg>';
+var PHIN_SVG='<svg viewBox="0 0 86 110" aria-hidden="true">'+
+ '<rect x="22" y="4" width="42" height="22" rx="3" fill="#c3c8cf" stroke="#8d939b" stroke-width="2"/>'+
+ '<rect x="14" y="24" width="58" height="6" rx="3" fill="#a9afb7"/>'+
+ '<circle class="drop" cx="43" cy="36" r="2.6" fill="#4a2a12"/><circle class="drop d2" cx="43" cy="36" r="2.6" fill="#4a2a12"/>'+
+ '<path d="M20 44 H66 L61 104 H25Z" fill="#eef6fa" stroke="#9fb7c4" stroke-width="2"/>'+
+ '<clipPath id="cup"><path d="M21 45 H65 L60 103 H26Z"/></clipPath>'+
+ '<g clip-path="url(#cup)"><rect x="18" y="88" width="50" height="20" fill="#f2e3c6"/><rect id="coffeeLevel" x="18" y="104" width="50" height="0" fill="#5a3216"/></g>'+
+ '</svg>';
+
+/* =========================================================
+   APP
+   ========================================================= */
+var lang = "zh", saved = null;
+try { saved = localStorage.getItem("vnfarm-lang"); if (saved && /^(zh|en|vi)$/.test(saved)) lang = saved; } catch(e){}
+if (!saved) { try { if ((navigator.language||"").toLowerCase().indexOf("vi")===0) lang="vi"; } catch(e){} }
+
+function tr(key){ var v=T[key]; return v ? (v[lang]||v.en) : key; }
+function applyLang(){
+  document.documentElement.lang = lang==="zh" ? "zh-CN" : lang;
+  document.querySelectorAll("[data-i]").forEach(function(el){ el.innerHTML = tr(el.getAttribute("data-i")); });
+  document.querySelectorAll(".lang button").forEach(function(b){ b.classList.toggle("on", b.dataset.lang===lang); });
+  renderSteps();
+  renderMenu();
+}
+document.querySelectorAll(".lang button").forEach(function(b){
+  b.addEventListener("click", function(){ lang=b.dataset.lang; try{localStorage.setItem("vnfarm-lang",lang);}catch(e){} applyLang(); });
+});
+
+/* photos: show the real image if it loads, otherwise keep the drawn placeholder */
+function loadFig(fig){
+  var src = fig.getAttribute("data-img"); if(!src || fig.querySelector("img")) return;
+  var img = new Image(); img.alt="";
+  img.onload = function(){ fig.insertBefore(img, fig.querySelector(".cap")); fig.classList.add("loaded"); };
+  img.src = src;
+}
+
+/* drifting leaves & beans */
+(function(){
+  var d=document.getElementById("drift"), h="";
+  for(var i=0;i<9;i++){
+    var bean=i%3===0, left=Math.round(Math.random()*95), dur=(9+Math.random()*9).toFixed(1), delay=(-Math.random()*15).toFixed(1);
+    h+='<i class="'+(bean?'b':'l')+'" style="left:'+left+'%;animation-duration:'+dur+'s;animation-delay:'+delay+'s"></i>';
+  }
+  d.innerHTML=h;
+})();
+
+/* coffee carousel */
+var car=document.getElementById("carousel"), dots=document.getElementById("dots"), idx=0, brewed=false;
+function renderSteps(){
+  car.innerHTML = STEPS.map(function(s){
+    var brew = s.brew ? '<div class="brew" id="brewBox">'+PHIN_SVG+'<div><button class="bbtn" id="brewBtn">'+tr("brew.btn")+'</button><div class="msg" id="brewMsg"></div></div></div>' : '';
+    return '<div class="slide"><div class="card"><div class="fig" data-img="'+s.img+'">'+BEAN_ICON+'<span class="cap">'+tr("img.note")+'</span></div>'+
+      '<h3>'+s.t[lang]+'</h3><p>'+s.d[lang]+'</p>'+brew+'</div></div>';
+  }).join("");
+  dots.innerHTML = STEPS.map(function(){return "<i></i>";}).join("");
+  car.querySelectorAll(".fig").forEach(loadFig);
+  brewed=false;
+  document.getElementById("brewBtn").onclick=brew;
+  setTimeout(function(){ goStep(idx, true); }, 0);
+}
+function brew(){
+  if(brewed) return; brewed=true;
+  var box=document.getElementById("brewBox"), lvl=document.getElementById("coffeeLevel"), msg=document.getElementById("brewMsg");
+  box.classList.add("brewing"); msg.textContent=tr("brew.wait");
+  requestAnimationFrame(function(){ lvl.setAttribute("y","62"); lvl.setAttribute("height","42"); });
+  setTimeout(function(){ box.classList.remove("brewing"); msg.textContent=tr("brew.done"); }, 4200);
+}
+function goStep(i, instant){
+  idx = Math.max(0, Math.min(STEPS.length-1, i));
+  car.scrollTo({left: idx*(car.clientWidth+14), behavior: instant?"auto":"smooth"});
+  updateDots();
+}
+function updateDots(){
+  dots.querySelectorAll("i").forEach(function(d,k){ d.classList.toggle("on", k<=idx); });
+  document.getElementById("prevBtn").style.visibility = idx===0 ? "hidden" : "visible";
+  var last = idx===STEPS.length-1;
+  document.getElementById("nextBtn").style.display = last ? "none" : "flex";
+  document.getElementById("coffeeDone").style.display = last ? "flex" : "none";
+}
+var st;
+car.addEventListener("scroll", function(){
+  clearTimeout(st); st=setTimeout(function(){
+    var i = Math.round(car.scrollLeft/(car.clientWidth+14)); if(i!==idx){ idx=i; updateDots(); }
+  },80);
+});
+document.getElementById("coffeeDone").onclick=function(){ document.getElementById("drinks").scrollIntoView({behavior:"smooth",block:"start"}); };
+document.getElementById("prevBtn").onclick=function(){goStep(idx-1);};
+document.getElementById("nextBtn").onclick=function(){goStep(idx+1);};
+
+/* visited badges */
+var visited={};
+try{ visited=JSON.parse(localStorage.getItem("vnfarm-visited")||"{}")||{}; }catch(e){}
+function markVisited(n){
+  if(["coffee","arts","stage","thanks"].indexOf(n)<0) return;
+  visited[n]=1; try{localStorage.setItem("vnfarm-visited",JSON.stringify(visited));}catch(e){}
+}
+function showVisited(){
+  document.querySelectorAll("#s-hub .post").forEach(function(p){ p.classList.toggle("visited", !!visited[p.dataset.go]); });
+}
+
+/* confetti on the thank-you card */
+function confetti(){
+  var c=document.getElementById("confetti"), cols=["#f6c445","#c8402f","#4f9a3c","#8a5a32","#ffffff"], h="";
+  for(var i=0;i<40;i++){
+    h+='<i style="left:'+(Math.random()*100)+'%;background:'+cols[i%cols.length]+';animation-delay:'+(Math.random()*.6).toFixed(2)+'s;animation-duration:'+(1.8+Math.random()*1.4).toFixed(2)+'s"></i>';
+  }
+  c.innerHTML=h; setTimeout(function(){ c.innerHTML=""; }, 3600);
+}
+
+/* routing (hash keeps the phone's Back button working) */
+var PARENT = {hub:"home", coffee:"hub", arts:"hub", stage:"arts", thanks:"hub"};
+function current(){ var n=(location.hash||"").replace(/^#\/?/,"")||"home"; return document.getElementById("s-"+n)?n:"home"; }
+function route(){
+  var name=current();
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.toggle("active", s.id==="s-"+name); });
+  document.getElementById("backBtn").classList.toggle("hidden", name==="home");
+  document.getElementById("homeBtn").classList.toggle("hidden", name==="home"||name==="hub");
+  if(name==="coffee") setTimeout(function(){goStep(idx,true);},0);
+  if(name==="hub") showVisited();
+  if(name==="thanks") confetti();
+  markVisited(name);
+  document.querySelectorAll("#s-"+name+" .fig").forEach(loadFig);
+  window.scrollTo(0,0);
+  if(name!=="stage") stopAll();
+}
+function go(name){ location.hash = "#/"+name; }
+document.addEventListener("click", function(e){ var el=e.target.closest("[data-go]"); if(el) go(el.getAttribute("data-go")); });
+document.addEventListener("keydown", function(e){ if(e.key==="Enter"){ var el=document.activeElement; if(el && el.dataset && el.dataset.go) go(el.dataset.go); } });
+document.getElementById("backBtn").onclick=function(){ go(PARENT[current()]||"home"); };
+document.getElementById("homeBtn").onclick=function(){ go("hub"); };
+window.addEventListener("hashchange", route);
+
+/* audio */
+var PLAY='<svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg>';
+var PAUSE='<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+var tracks=Array.prototype.slice.call(document.querySelectorAll(".track"));
+var stageBox=document.getElementById("stageBox");
+function fmt(s){ if(!isFinite(s)) return "–:––"; s=Math.floor(s); return Math.floor(s/60)+":"+("0"+s%60).slice(-2); }
+function stopAll(except){ tracks.forEach(function(t){ var a=t.querySelector("audio"); if(a!==except && !a.paused) a.pause(); }); }
+function syncLive(){ stageBox.classList.toggle("live", tracks.some(function(t){ return !t.querySelector("audio").paused; })); }
+tracks.forEach(function(t){
+  var a=t.querySelector("audio"), btn=t.querySelector(".play"), bar=t.querySelector(".bar"), fill=bar.querySelector("i"),
+      soon=t.querySelector(".soon"), cur=t.querySelector(".cur"), dur=t.querySelector(".dur"), knob=bar.querySelector("b"), dragging=false;
+  function paint(f){ fill.style.width=(f*100)+"%"; knob.style.left=(f*100)+"%"; }
+  function missing(){ btn.disabled=true; soon.hidden=false; }
+  a.addEventListener("error", missing);
+  a.addEventListener("play", function(){ btn.innerHTML=PAUSE; t.classList.add("playing"); syncLive(); });
+  a.addEventListener("pause", function(){ btn.innerHTML=PLAY; t.classList.remove("playing"); syncLive(); });
+  a.addEventListener("ended", function(){ btn.innerHTML=PLAY; paint(0); t.classList.remove("playing"); syncLive(); });
+  a.addEventListener("loadedmetadata", function(){ dur.textContent=fmt(a.duration); });
+  a.addEventListener("timeupdate", function(){ if(a.duration && !dragging){ paint(a.currentTime/a.duration); cur.textContent=fmt(a.currentTime); } });
+  btn.addEventListener("click", function(){
+    if(a.paused){ stopAll(a); var p=a.play(); if(p && p.catch) p.catch(function(){ if(a.error||a.networkState===3) missing(); }); }
+    else a.pause();
+  });
+  /* seeking: tap or drag the bar, or use the ±10s buttons */
+  function ready(cb){ if(a.duration) return cb(); a.preload="metadata"; a.addEventListener("loadedmetadata", function f(){ a.removeEventListener("loadedmetadata",f); cb(); }); a.load(); }
+  function frac(e){ var r=bar.getBoundingClientRect(); return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)); }
+  bar.addEventListener("pointerdown", function(e){
+    var f=frac(e); dragging=true; bar.classList.add("drag"); paint(f);
+    try{ bar.setPointerCapture(e.pointerId); }catch(_){}
+    ready(function(){ cur.textContent=fmt(f*a.duration); });
+  });
+  bar.addEventListener("pointermove", function(e){
+    if(!dragging) return; var f=frac(e); paint(f); if(a.duration) cur.textContent=fmt(f*a.duration);
+  });
+  function endDrag(e){
+    if(!dragging) return; var f=frac(e); dragging=false; bar.classList.remove("drag");
+    ready(function(){ a.currentTime=f*a.duration; paint(f); cur.textContent=fmt(a.currentTime); });
+  }
+  bar.addEventListener("pointerup", endDrag);
+  bar.addEventListener("pointercancel", function(){ dragging=false; bar.classList.remove("drag"); });
+  bar.addEventListener("keydown", function(e){
+    var d=e.key==="ArrowRight"?5:e.key==="ArrowLeft"?-5:0; if(!d) return; e.preventDefault();
+    ready(function(){ a.currentTime=Math.max(0,Math.min(a.duration,a.currentTime+d)); });
+  });
+  t.querySelectorAll(".skip").forEach(function(sb){
+    sb.addEventListener("click", function(){
+      var d=+sb.dataset.skip; ready(function(){ a.currentTime=Math.max(0,Math.min(a.duration-0.5,a.currentTime+d)); paint(a.currentTime/a.duration); cur.textContent=fmt(a.currentTime); });
+    });
+  });
+  if(/^https?:/.test(location.protocol)){
+    try{ var x=new XMLHttpRequest(); x.open("HEAD", a.getAttribute("src"));
+      x.onload=function(){ if(x.status>=400) missing(); }; x.onerror=missing; x.send(); }catch(e){ missing(); }
+  }
+});
+
+applyLang();
+route();
+</script>
+</body>
+</html>
