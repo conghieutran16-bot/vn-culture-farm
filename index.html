@@ -89,6 +89,7 @@ html[lang="vi"] .orig{display:none}
 .fig{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/10;margin-bottom:12px;
   background:linear-gradient(135deg,#ffe7a8,#bfe3a0);display:grid;place-items:center;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}
 .fig.tall{aspect-ratio:4/5}.fig.tall2{aspect-ratio:2/3;max-width:78%;margin-left:auto;margin-right:auto}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.duo .fig{aspect-ratio:4/5;margin-bottom:0}.duocap{font-size:12px;opacity:.7;text-align:center;margin:6px 0 4px}
 .fig svg{width:46%;height:auto}
 .fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fade .5s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -392,6 +393,11 @@ html[lang="vi"] .drink .vn{display:none}
       </div>
       <h4 data-i="vov.name"></h4>
       <p data-i="vov.desc"></p>
+      <div class="duo">
+        <div class="fig" data-img="assets/vov-bn1.webp"><svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="fig" data-img="assets/vov-bn2.webp"><svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg></div>
+      </div>
+      <div class="duocap" data-i="img.bn"></div>
     </div>
 
     <div class="item">
@@ -533,6 +539,7 @@ var T = {
  "brew.wait":{zh:"一滴、一滴……请耐心等待",en:"Drop by drop… be patient",vi:"Từng giọt, từng giọt… kiên nhẫn nhé"},
  "brew.done":{zh:"你的越南咖啡好了！",en:"Your Vietnamese coffee is ready!",vi:"Ly cà phê của bạn đã xong!"},
 
+ "img.bn":{zh:"实拍照片 · 我们的同学 Bảo Ngọc 身穿越南武术服",en:"Real photos · our classmate Bảo Ngọc in the Vovinam uniform",vi:"Ảnh thực tế · bạn Bảo Ngọc trong võ phục Vovinam"},
  "img.note":{zh:"示意图片",en:"Illustrative photo",vi:"Ảnh minh họa"},
  "img.noteTcs":{zh:"示意图片 · 作曲家 Trịnh Công Sơn",en:"Illustrative photo · composer Trịnh Công Sơn",vi:"Ảnh minh họa · nhạc sĩ Trịnh Công Sơn"},
 
