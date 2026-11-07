@@ -89,7 +89,12 @@ html[lang="vi"] .orig{display:none}
 .fig{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/10;margin-bottom:12px;
   background:linear-gradient(135deg,#ffe7a8,#bfe3a0);display:grid;place-items:center;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}
 .fig.tall{aspect-ratio:4/5}.fig.tall2{aspect-ratio:2/3;max-width:78%;margin-left:auto;margin-right:auto}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.duo .fig{aspect-ratio:4/5;margin-bottom:0}.duocap{font-size:12px;opacity:.7;text-align:center;margin:6px 0 4px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.duo .fig{aspect-ratio:4/5;margin-bottom:0}.fig.wide{aspect-ratio:16/9;margin:10px 0 0}.duo2{margin-top:12px}.more{max-height:9.6em;overflow:hidden;position:relative;transition:max-height .4s}
+.more:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3em;background:linear-gradient(rgba(255,248,232,0),#fff8e8)}
+.more.open{max-height:none}.more.open:after{display:none}
+.morebtn{display:block;margin:4px auto 12px;border:0;background:#4f9a3c;color:#fff;font:inherit;font-size:13px;padding:6px 16px;border-radius:999px;cursor:pointer}
+.duo2 .duocap{margin:6px 2px 0;line-height:1.35}
+.duocap{font-size:12px;opacity:.7;text-align:center;margin:6px 0 4px}
 .fig svg{width:46%;height:auto}
 .fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fade .5s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -383,7 +388,10 @@ html[lang="vi"] .drink .vn{display:none}
         <span class="cap" data-i="img.note"></span>
       </div>
       <h4 data-i="mam.name"></h4>
-      <p data-i="mam.desc"></p>
+      <div class="more"><p data-i="mam.desc"></p></div>
+      <button class="morebtn" data-i="ui.more"></button>
+      <div class="fig wide" data-img="assets/mam-sseayp.webp"><svg viewBox="0 0 100 60"><ellipse cx="50" cy="37" rx="40" ry="10" fill="#f6c445"/></svg></div>
+      <div class="duocap" data-i="img.sseayp"></div>
     </div>
 
     <div class="item">
@@ -392,12 +400,14 @@ html[lang="vi"] .drink .vn{display:none}
         <span class="cap" data-i="img.note"></span>
       </div>
       <h4 data-i="vov.name"></h4>
-      <p data-i="vov.desc"></p>
+      <div class="more"><p data-i="vov.desc"></p></div>
+      <button class="morebtn" data-i="ui.more"></button>
       <div class="duo">
         <div class="fig" data-img="assets/vov-bn1.webp"><svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg></div>
         <div class="fig" data-img="assets/vov-bn2.webp"><svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg></div>
       </div>
       <div class="duocap" data-i="img.bn"></div>
+      <div class="duo duo2"><div><div class="fig" data-img="assets/vov-binhkhi.webp"><svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg></div><div class="duocap" data-i="img.binhkhi"></div></div><div><div class="fig" data-img="assets/vov-moment.webp"><svg viewBox="0 0 100 80"><circle cx="45" cy="14" r="8" fill="#5e3a1c"/><path d="M45 22 L45 48 M45 30 L28 22 M45 30 L60 36 M45 48 L32 72 M45 48 L80 40" stroke="#2f6fd0" stroke-width="7" stroke-linecap="round" fill="none"/></svg></div><div class="duocap" data-i="img.moment"></div></div></div>
     </div>
 
     <div class="item">
@@ -540,6 +550,11 @@ var T = {
  "brew.done":{zh:"你的越南咖啡好了！",en:"Your Vietnamese coffee is ready!",vi:"Ly cà phê của bạn đã xong!"},
 
  "img.bn":{zh:"实拍照片 · 我们的同学 Bảo Ngọc 身穿越南武术服",en:"Real photos · our classmate Bảo Ngọc in the Vovinam uniform",vi:"Ảnh thực tế · bạn Bảo Ngọc trong võ phục Vovinam"},
+ "img.sseayp":{"zh":"Thanh Tú（Chloe）在 SSEAYP 2026 表演金盘舞 · 版权归 SSEAYP Vietnam","en":"Thanh Tú (Chloe) performing the Golden Tray Dance at SSEAYP 2026 · © SSEAYP Vietnam","vi":"Thanh Tú (Chloe) múa mâm vàng tại SSEAYP 2026 · Bản quyền thuộc SSEAYP Vietnam"},
+ "img.binhkhi":{"zh":"示意图片 · 越武道也有器械套路","en":"Illustrative photo · Vovinam also has weapon forms","vi":"Ảnh minh họa · Vovinam có cả các bài binh khí"},
+ "img.moment":{"zh":"练习中的一个瞬间","en":"A random training moment","vi":"Một khoảnh khắc luyện tập"},
+ "ui.more":{"zh":"展开阅读 ▾","en":"Read more ▾","vi":"Xem thêm ▾"},
+ "ui.less":{"zh":"收起 ▴","en":"Show less ▴","vi":"Thu gọn ▴"},
  "img.note":{zh:"示意图片",en:"Illustrative photo",vi:"Ảnh minh họa"},
  "img.noteTcs":{zh:"示意图片 · 作曲家 Trịnh Công Sơn",en:"Illustrative photo · composer Trịnh Công Sơn",vi:"Ảnh minh họa · nhạc sĩ Trịnh Công Sơn"},
 
@@ -550,10 +565,10 @@ var T = {
  "arts.p1flow":{zh:"合唱开场，托盘舞随着歌声展开，随后转入越武道套路表演。合唱一直唱完整首歌。",en:"The choir opens the song. The Tray Dance unfolds with the singing, then flows into a Vovinam form. The choir sings all the way to the end.",vi:"Tốp ca mở màn, múa mâm diễn cùng lời hát, sau đó chuyển sang đi quyền Vovinam. Tốp ca hát trọn vẹn cả bài."},
  "arts.p2flow":{zh:"在这首歌的摇滚版本中，我们以一段现代舞结束演出。",en:"We close the show with a modern dance to a rock version of this song.",vi:"Chúng tôi khép lại tiết mục bằng phần nhảy hiện đại trên nền bản rock của bài hát này."},
 
- "mam.name":{zh:"托盘舞（Múa mâm）",en:"Tray Dance (Múa mâm)",vi:"Múa mâm"},
- "mam.desc":{zh:"越南的民间舞蹈，舞者以托盘为道具，带来欢乐的节日气氛，象征团结与分享。",en:"A Vietnamese folk dance performed with trays. It brings a joyful, festive mood and expresses togetherness and sharing.",vi:"Điệu múa dân gian Việt Nam dùng mâm làm đạo cụ, mang không khí lễ hội vui tươi, thể hiện sự gắn kết và sẻ chia."},
+ "mam.name":{"zh": "金盘舞（Múa mâm vàng）", "en": "Golden Tray Dance (Múa mâm vàng)", "vi": "Múa mâm vàng"},
+ "mam.desc":{"vi": "Múa mâm vàng là một loại hình diễn xướng dân gian của vùng đất Nam Bộ, được hình thành và phát triển từ nghệ thuật múa bóng rỗi. Đây là loại hình nghệ thuật múa hát nghi lễ, kết hợp giữa động tác múa, âm nhạc và các đạo cụ mang ý nghĩa văn hóa, tín ngưỡng. Điểm đặc trưng của tiết mục là chiếc mâm vàng được người biểu diễn sử dụng một cách khéo léo, kết hợp các động tác nâng, xoay và giữ thăng bằng, tạo nên những chuyển động uyển chuyển và đẹp mắt.<br><br>Không chỉ thể hiện sự khéo léo và kỹ thuật của người biểu diễn, múa mâm vàng còn phản ánh đời sống văn hóa, tín ngưỡng dân gian phong phú của người dân Nam Bộ. Qua thời gian, loại hình nghệ thuật này góp phần gìn giữ và lan tỏa những giá trị văn hóa truyền thống của miền Nam Việt Nam. Sự kết hợp giữa âm nhạc, vũ đạo và đạo cụ truyền thống tạo nên một tiết mục vừa sinh động vừa đậm đà bản sắc dân tộc.<br><br>Tiết mục được giới thiệu sau đây là phần biểu diễn được trích từ màn trình diễn của Thanh Tú (Chloe), đại biểu Việt Nam tham gia Chương trình Tàu Thanh niên Đông Nam Á – Nhật Bản (SSEAYP) năm 2026.", "en": "The Golden Tray Dance is a form of Southern Vietnamese folk performance that originated from and evolved out of “Múa bóng rỗi,” a traditional ritual dance of Southern Vietnam. It is a ceremonial art form that combines dance, music, and symbolic props rooted in local cultural and spiritual traditions. One of its most distinctive features is the golden tray, which performers skillfully lift, spin, and balance through a series of graceful and intricate movements.<br><br>Beyond demonstrating the performers' dexterity and technique, the dance reflects the rich folk beliefs and cultural life of the people of Southern Vietnam. Over time, this art form has continued to preserve and promote the traditional cultural heritage of the region. Through the harmonious combination of music, movement, and traditional props, the performance offers audiences a glimpse into the unique cultural identity of Southern Vietnam.<br><br>The performance you are about to see is adapted from a dance presentation by Thanh Tú (Chloe), Vietnam's delegate to the Ship for Southeast Asian and Japanese Youth Program (SSEAYP) 2026.", "zh": "金盘舞是越南南部地区的一种民间表演艺术，起源于并发展自当地传统的“bóng rỗi”仪式舞蹈。这是一种融合舞蹈、音乐与仪式元素的民间艺术形式，承载着当地独特的文化与信仰内涵。其最具特色的道具是金色托盘，表演者通过托举、旋转和平衡等技巧，展现一系列优美而富有变化的舞蹈动作。<br><br>金盘舞不仅体现了表演者的灵巧与精湛技艺，也反映了越南南部丰富多彩的民间信仰与文化生活。随着时代的发展，这种艺术形式持续发挥着传承和弘扬越南南部传统文化的重要作用。通过音乐、舞蹈动作与传统道具的巧妙结合，金盘舞向观众展现了越南南部独特的文化魅力。<br><br>接下来呈现的节目改编自越南参加2026年“东南亚与日本青年之船”计划（SSEAYP）的代表 Thanh Tú（Chloe）的舞蹈表演。"},
  "vov.name":{zh:"越武道（Vovinam）",en:"Vovinam",vi:"Võ Vovinam"},
- "vov.desc":{zh:"越南的武术，以蓝色武服和优美的腿法著称，融合柔韧与力量，体现尚武精神。我们的一位女同学将身穿越武道武服表演套路。",en:"A Vietnamese martial art known for its blue uniform and graceful leg techniques. It combines flexibility and strength in a spirit of discipline and respect. One of our members performs a form in the Vovinam uniform.",vi:"Môn võ Việt Nam nổi bật với võ phục xanh lam và các đòn chân đẹp mắt, kết hợp sự dẻo dai và sức mạnh, thể hiện tinh thần thượng võ. Một bạn nữ trong nhóm sẽ đi quyền trong võ phục Vovinam."},
+ "vov.desc":{"vi": "Vovinam (Việt Võ Đạo) là từ quốc tế hóa của Võ thuật - Võ đạo Việt Nam. Môn võ vận hành theo nguyên tắc “Cương nhu phối triển”, kết hợp kỹ thuật tay không, binh khí và các bài ngoại công, khí công. Nét đặc trưng biểu tượng nhất của môn phái chính là các “đòn chân tấn công” bay cao kẹp cổ độc đáo.<br><br>Môn võ do võ sư Nguyễn Lộc cùng các đồng môn đúc kết từ năm 1936 và chính thức ra mắt năm 1938 tại Hà Nội. Như một cuộc cách mạng Tâm - Thân, mục đích ra đời của Vovinam còn xuất phát từ lòng yêu nước: cố võ sư Nguyễn Lộc mong muốn môn võ này sẽ góp phần trong đấu tranh vũ trang giúp Việt Nam giải phóng đất nước khỏi ách đô hộ của thực dân Pháp. Sau năm 1975, Vovinam phát triển mạnh mẽ ra toàn cầu. Qua hơn 85 năm hình thành, Vovinam hiện đã có mặt tại hơn 70 quốc gia và vùng lãnh thổ, thu hút hàng triệu võ sinh tập luyện.<br><br>Vovinam sở hữu lối đánh tấn công bất ngờ, nhanh gọn và dứt khoát. Hệ thống kỹ thuật bao gồm đấm, chỏ, gạt, đá, khóa gỡ, phản đòn tay không chống vũ khí cùng các bài binh khí đa dạng như kiếm, đao, mã tấu, côn, quạt, v.v.<br><br>Nhập Môn Quyền là bài quyền đầu tiên võ sinh được học để luyện bộ tấn và đòn thế căn bản. Tiết mục được biểu diễn là một nửa bài Nhập Môn Quyền, đã được cải biên lại để phù hợp với sân khấu.", "en": "Vovinam (Việt Võ Đạo) is one of Vietnam's traditional martial arts, rooted in the philosophy of “Hard and Soft Combined.” It combines unarmed combat techniques, traditional weapons, and physical and breathing exercises, with its signature flying scissor kicks being one of its most distinctive features.<br><br>Developed by grandmaster Nguyễn Lộc and his fellow practitioners in 1936, Vovinam was officially introduced in Hanoi in 1938. Rooted in patriotism, it was created not only to strengthen the body and mind but also to contribute to Vietnam's struggle for independence from French colonial rule. Since 1975, Vovinam has spread rapidly around the world and is now practiced in over 70 countries and territories.<br><br>Its techniques include punches, elbow strikes, blocks, kicks, grappling, self-defense, and the use of various traditional weapons such as swords, sabers, staffs, and fans.<br><br>Nhập Môn Quyền (The Introductory Form) is the first routine students learn to master basic stances and techniques. The performance today features an adapted half-version of this routine, specially modified for the stage.", "zh": "越武道（Vovinam，Việt Võ Đạo）是越南传统武术的重要流派之一，以“刚柔并济”为核心理念，融合了徒手格斗、传统器械以及外功和气功训练，其中最具代表性的特色之一是独特的凌空剪腿技法。<br><br>越武道由武术大师阮禄（Nguyễn Lộc）与同门武术家于1936年共同创立，并于1938年在河内正式公开亮相。这门武术不仅注重身心的锻炼，更蕴含着深厚的爱国精神，其创立初衷之一是希望通过武术为越南人民争取民族独立、摆脱法国殖民统治的斗争贡献力量。1975年后，越武道逐渐走向世界，如今已传播至70多个国家和地区，吸引了数百万名习练者。<br><br>越武道以出其不意、快速凌厉、干脆果断的进攻风格著称，其技术体系包括拳击、肘击、格挡、踢击、擒拿与解脱、徒手对抗持械攻击的反击技巧，以及剑、刀、棍、扇等多种传统器械的运用。<br><br>入门拳是习练者入门后学习的第一套拳法，主要用于掌握基本步法、站姿和攻防动作。本次表演呈现的是入门拳的一半内容，并根据舞台表演的需要进行了适当改编。"},
 
  "song.about":{zh:"关于这首歌",en:"About the song",vi:"Về bài hát"},
  "song1.name":{zh:"《南方土地之歌》",en:"“Song of the Southern Land”",vi:"Bài ca đất phương Nam"},
@@ -838,6 +853,10 @@ tracks.forEach(function(t){
 
 applyLang();
 route();
+
+document.querySelectorAll(".morebtn").forEach(function(b){
+  b.addEventListener("click",function(){ var m=b.previousElementSibling, o=m.classList.toggle("open"); b.setAttribute("data-i", o?"ui.less":"ui.more"); b.innerHTML=tr(b.getAttribute("data-i")); });
+});
 </script>
 </body>
 </html>
